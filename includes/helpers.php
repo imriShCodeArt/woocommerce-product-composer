@@ -8,6 +8,17 @@ if (!defined('ABSPATH')) {
 
 function get_associated_products($product_id)
 {
-    // TODO: Return array of associated product IDs
-    return [];
+    $ids = get_post_meta($product_id, '_associated_products', true);
+    if (!is_array($ids)) {
+        return [];
+    }
+
+    $products = [];
+    foreach ($ids as $id) {
+        $product = wc_get_product($id);
+        if ($product && $product->is_visible()) {
+            $products[] = $product;
+        }
+    }
+    return $products;
 }
