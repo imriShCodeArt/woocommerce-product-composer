@@ -12,6 +12,7 @@ class Admin
     {
         add_action('add_meta_boxes', [$this, 'add_association_metabox']);
         add_action('save_post', [$this, 'save_association_meta']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
     }
 
     public function add_association_metabox()
@@ -21,7 +22,7 @@ class Admin
             __('Associated Products', 'woocommerce-product-composer'),
             [$this, 'render_association_metabox'],
             'product',
-            'side',
+            'normal',
             'default'
         );
     }
@@ -30,34 +31,23 @@ class Admin
     {
         wp_nonce_field('wc_pc_save_associations', 'wc_pc_nonce');
 
-        $associated_ids = get_post_meta($post->ID, '_associated_products', true);
-        if (!is_array($associated_ids)) {
-            $associated_ids = $associated_ids ? [(int) $associated_ids] : [];
+        $associated_products = get_post_meta($post->ID, '_associated_products', true);
+        if (!is_array($associated_products)) {
+            $associated_products = [];
         }
 
-        $args = [
+        $products = get_posts([
             'post_type' => 'product',
             'post_status' => 'publish',
             'posts_per_page' => -1,
             'post__not_in' => [$post->ID],
-        ];
+        ]);
 
-        $products = get_posts($args);
+        $template_path = plugin_dir_path(__FILE__) . '../templates/admin/association-metabox.php';
 
-        echo '<p>' . esc_html__('Select products that should be suggested as accessories for this product.', 'woocommerce-product-composer') . '</p>';
-        echo '<select name="wc_pc_associated_products[]" multiple style="width:100%;height:150px;">';
-
-        foreach ($products as $product) {
-            $selected = in_array($product->ID, $associated_ids) ? 'selected' : '';
-            printf(
-                '<option value="%d" %s>%s</option>',
-                $product->ID,
-                $selected,
-                esc_html($product->post_title)
-            );
+        if (file_exists($template_path)) {
+            include $template_path;
         }
-
-        echo '</select>';
     }
 
     public function save_association_meta($post_id)
@@ -70,11 +60,46 @@ class Admin
             return;
         }
 
-        if (isset($_POST['wc_pc_associated_products']) && is_array($_POST['wc_pc_associated_products'])) {
-            $ids = array_map('intval', $_POST['wc_pc_associated_products']);
-            update_post_meta($post_id, '_associated_products', $ids);
+        if (!empty($_POST['wc_pc_associated_products']['product_id'])) {
+            $associated = [];
+            $product_ids = $_POST['wc_pc_associated_products']['product_id'];
+            $min_qtys = $_POST['wc_pc_associated_products']['min_qty'];
+            $max_qtys = $_POST['wc_pc_associated_products']['max_qty'];
+
+            foreach ($product_ids as $i => $pid) {
+                $associated[] = [
+                    'product_id' => intval($pid),
+                    'min_qty' => intval($min_qtys[$i]),
+                    'max_qty' => intval($max_qtys[$i]),
+                ];
+            }
+
+            update_post_meta($post_id, '_associated_products', $associated);
         } else {
             delete_post_meta($post_id, '_associated_products');
         }
     }
+
+    public function enqueue_admin_assets($hook)
+    {
+        global $post_type;
+
+        if ($hook === 'post.php' || $hook === 'post-new.php') {
+            if ($post_type === 'product') {
+                wp_enqueue_script(
+                    'wc-pc-admin-associations',
+                    plugins_url('../assets/js/admin-associations.js', __FILE__),
+                    ['jquery'],
+                    '1.0',
+                    true
+                );
+
+                wp_localize_script('wc-pc-admin-associations', 'wc_pc_admin', [
+                    'remove_label' => __('Remove', 'woocommerce-product-composer'),
+                    'no_items_label' => __('No associated products yet.', 'woocommerce-product-composer'),
+                ]);
+            }
+        }
+    }
+
 }
