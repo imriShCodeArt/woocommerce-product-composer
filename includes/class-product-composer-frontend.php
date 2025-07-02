@@ -11,7 +11,7 @@ class Frontend
 
     public function __construct()
     {
-        add_action('woocommerce_single_product_summary', [$this, 'render_composer_section'], 25);
+        add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'render_composer_section' ], 10 );
     }
 
     public function render_composer_section()
