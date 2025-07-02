@@ -39,7 +39,7 @@ if (empty($associated_products)) {
                     <input step="1" type="number" id="wc_pc_accessory_qty_<?php echo esc_attr($product->get_id()); ?>"
                         name="wc_pc_accessories[<?php echo esc_attr($product->get_id()); ?>][quantity]" value="1" min="0"
                         style="width: 60px;" class="input-text qty text wc-pc-accessory-qty"
-                        data-product-id="<?php echo esc_attr($product->get_id()); ?>" disabled>
+                        data-product-id="<?php echo esc_attr($product->get_id()); ?>">
 
                     <input type="button" value="+" class="ux-quantity__button ux-quantity__button--plus button plus is-form"
                         data-product-id="<?php echo esc_attr($product->get_id()); ?>">

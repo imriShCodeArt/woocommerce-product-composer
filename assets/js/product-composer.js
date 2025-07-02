@@ -8,14 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
         '.wc-pc-accessory-qty[data-product-id="' + productId + '"]'
       );
 
-      // if (this.checked) {
-      //   qtyInput.step = 1;
-      //   qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
-      //   qtyInput.disabled = false;
-      // } else {
-      //   qtyInput.disabled = true;
-      //   qtyInput.value = 1;
-      // }
+      if (this.checked) {
+        qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
+      }
     });
   });
 
