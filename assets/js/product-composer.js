@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.addEventListener(
     "click",
     function (e) {
+      if (
+        e.target.matches(".ux-quantity__button--plus") ||
+        e.target.matches(".ux-quantity__button--minus")
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+
       if (e.target.matches(".ux-quantity__button--plus")) {
         const wrapper = e.target.closest(".ux-quantity");
         const input = wrapper?.querySelector('input[type="number"]');
