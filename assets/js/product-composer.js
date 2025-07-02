@@ -1,23 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const checkboxes = document.querySelectorAll(".wc-pc-accessory-checkbox");
+  // const checkboxes = document.querySelectorAll(".wc-pc-accessory-checkbox");
 
-  checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener("change", function () {
-      const productId = this.dataset.productId;
-      const qtyInput = document.querySelector(
-        '.wc-pc-accessory-qty[data-product-id="' + productId + '"]'
-      );
+  // checkboxes.forEach(function (checkbox) {
+  //   checkbox.addEventListener("change", function () {
+  //     const productId = this.dataset.productId;
+  //     const qtyInput = document.querySelector(
+  //       '.wc-pc-accessory-qty[data-product-id="' + productId + '"]'
+  //     );
 
-      if (this.checked) {
-        qtyInput.step = 1;
-        qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
-        qtyInput.disabled = false;
-      } else {
-        qtyInput.disabled = true;
-        qtyInput.value = 1;
-      }
-    });
-  });
+  //     if (this.checked) {
+  //       qtyInput.step = 1;
+  //       qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
+  //       qtyInput.disabled = false;
+  //     } else {
+  //       qtyInput.disabled = true;
+  //       qtyInput.value = 1;
+  //     }
+  //   });
+  // });
 
   document.body.addEventListener(
     "click",
