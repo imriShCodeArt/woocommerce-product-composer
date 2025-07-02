@@ -28,9 +28,10 @@ if (empty($associated_products)) {
                     <?php esc_html_e('Add to package', 'woocommerce-product-composer'); ?>
                 </label>
                 <div class="ux-quantity quantity buttons_added" style="margin-left: 10px;">
-                    <input type="button" value="-"
-                        class="ux-quantity__button ux-quantity__button--minus button minus is-form"
+                    <button type="button" class="ux-quantity__button ux-quantity__button--minus button minus is-form"
                         data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                        -
+                    </button>
 
                     <label class="screen-reader-text" for="wc_pc_accessory_qty_<?php echo esc_attr($product->get_id()); ?>">
                         <?php esc_html_e('Quantity', 'woocommerce-product-composer'); ?>
@@ -41,8 +42,10 @@ if (empty($associated_products)) {
                         style="width: 60px;" class="input-text qty text wc-pc-accessory-qty"
                         data-product-id="<?php echo esc_attr($product->get_id()); ?>" disabled>
 
-                    <input type="button" value="+" class="ux-quantity__button ux-quantity__button--plus button plus is-form"
+                    <button type="button" class="ux-quantity__button ux-quantity__button--plus button plus is-form"
                         data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                        +
+                    </button>
                 </div>
 
             </li>
