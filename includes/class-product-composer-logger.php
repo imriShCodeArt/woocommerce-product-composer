@@ -2,6 +2,9 @@
 
 namespace WC_Product_Composer;
 
+use WC_Logger;
+use WC_Log_Levels;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -9,25 +12,86 @@ if (!defined('ABSPATH')) {
 class Logger
 {
 
-    protected $log_file;
+    /**
+     * Singleton instance.
+     *
+     * @var Logger
+     */
+    private static $instance = null;
 
-    public function __construct()
+    /**
+     * WooCommerce logger instance.
+     *
+     * @var WC_Logger
+     */
+    private $wc_logger;
+
+    /**
+     * Log source.
+     *
+     * @var string
+     */
+    private $source = 'wc-product-composer';
+
+    /**
+     * Private constructor.
+     */
+    private function __construct()
     {
-        $upload_dir = wp_upload_dir();
-        $dir = trailingslashit($upload_dir['basedir']) . 'wc-product-composer-logs/';
-
-        if (!file_exists($dir)) {
-            wp_mkdir_p($dir);
-        }
-
-        $this->log_file = $dir . 'composer.log';
+        $this->wc_logger = wc_get_logger();
     }
 
-    public function log($message)
+    /**
+     * Get the singleton instance.
+     *
+     * @return Logger
+     */
+    public static function get_instance()
     {
-        $date = date('Y-m-d H:i:s');
-        $formatted = "[{$date}] " . $message . PHP_EOL;
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
-        file_put_contents($this->log_file, $formatted, FILE_APPEND);
+    /**
+     * Log an info message.
+     *
+     * @param string $message
+     */
+    public function info($message)
+    {
+        $this->log($message, WC_Log_Levels::INFO);
+    }
+
+    /**
+     * Log a warning message.
+     *
+     * @param string $message
+     */
+    public function warning($message)
+    {
+        $this->log($message, WC_Log_Levels::WARNING);
+    }
+
+    /**
+     * Log an error message.
+     *
+     * @param string $message
+     */
+    public function error($message)
+    {
+        $this->log($message, WC_Log_Levels::ERROR);
+    }
+
+    /**
+     * Generic log method.
+     *
+     * @param string $message
+     * @param string $level
+     */
+    public function log($message, $level = WC_Log_Levels::INFO)
+    {
+        $this->wc_logger->log($level, $message, ['source' => $this->source]);
     }
 }
