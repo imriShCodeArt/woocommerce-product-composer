@@ -97,7 +97,9 @@ class Admin
                 wp_localize_script('wc-pc-admin-associations', 'wc_pc_admin', [
                     'remove_label' => __('Remove', 'woocommerce-product-composer'),
                     'no_items_label' => __('No associated products yet.', 'woocommerce-product-composer'),
+                    'unlimited_label' => __('Unlimited', 'woocommerce-product-composer'),
                 ]);
+                
             }
         }
     }

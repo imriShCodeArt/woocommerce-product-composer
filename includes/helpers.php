@@ -8,17 +8,36 @@ if (!defined('ABSPATH')) {
 
 function get_associated_products($product_id)
 {
-    $ids = get_post_meta($product_id, '_associated_products', true);
-    if (!is_array($ids)) {
+    $rows = get_post_meta($product_id, '_associated_products', true);
+
+    if (!is_array($rows)) {
         return [];
     }
 
     $products = [];
-    foreach ($ids as $id) {
-        $product = wc_get_product($id);
+
+    foreach ($rows as $assoc) {
+        if (is_array($assoc)) {
+            $pid = intval($assoc['product_id']);
+            $min_qty = isset($assoc['min_qty']) ? intval($assoc['min_qty']) : 0;
+            $max_qty = isset($assoc['max_qty']) ? intval($assoc['max_qty']) : 0;
+        } else {
+            // backward compatibility
+            $pid = intval($assoc);
+            $min_qty = 0;
+            $max_qty = 0;
+        }
+
+        $product = wc_get_product($pid);
+
         if ($product && $product->is_visible()) {
-            $products[] = $product;
+            $products[] = [
+                'product' => $product,
+                'min_qty' => $min_qty,
+                'max_qty' => $max_qty,
+            ];
         }
     }
+
     return $products;
 }

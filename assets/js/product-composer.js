@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (this.checked) {
+        qtyInput.step = 0;
         qtyInput.value = Math.max(1, parseInt(qtyInput.value) || 1);
       }
     });

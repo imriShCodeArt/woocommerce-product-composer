@@ -7,13 +7,16 @@
 
     var row =
       "<tr>" +
-      '<td><input type="hidden" name="wc_pc_associated_products[product_id][]" value="' +
+      "<td>" +
+      '<input type="hidden" name="wc_pc_associated_products[product_id][]" value="' +
       productId +
       '" />' +
       productName +
       "</td>" +
-      '<td><input type="number" name="wc_pc_associated_products[min_qty][]" value="" min="0" style="width:70px;" /></td>' +
-      '<td><input type="number" name="wc_pc_associated_products[max_qty][]" value="" min="0" style="width:70px;" /></td>' +
+      '<td><input type="number" name="wc_pc_associated_products[min_qty][]" value="0" min="0" style="width:70px;" /></td>' +
+      '<td><input type="number" name="wc_pc_associated_products[max_qty][]" value="" min="0" style="width:95px;" placeholder="' +
+      wc_pc_admin.unlimited_label +
+      '" /></td>' +
       '<td><button type="button" class="button wc-pc-remove-row">' +
       wc_pc_admin.remove_label +
       "</button></td>" +

@@ -28,12 +28,22 @@ if (!defined('ABSPATH')) {
     <tbody>
         <?php if (!empty($associated_products)): ?>
             <?php foreach ($associated_products as $assoc):
-                $product_id = intval($assoc['product_id']);
+                if (is_array($assoc)) {
+                    $product_id = intval($assoc['product_id']);
+                    $min_qty = isset($assoc['min_qty']) ? intval($assoc['min_qty']) : '';
+                    $max_qty = isset($assoc['max_qty']) ? intval($assoc['max_qty']) : '';
+                } else {
+                    // fallback for older meta (int only)
+                    $product_id = intval($assoc);
+                    $min_qty = '';
+                    $max_qty = '';
+                }
+
                 $product = get_post($product_id);
                 if (!$product)
                     continue;
 
-                $min_qty = isset($assoc['min_qty']) ? intval($assoc['min_qty']) : '';
+                $min_qty = isset($assoc['min_qty']) ? intval($assoc['min_qty']) : '0';
                 $max_qty = isset($assoc['max_qty']) ? intval($assoc['max_qty']) : '';
                 ?>
                 <tr>
@@ -44,8 +54,9 @@ if (!defined('ABSPATH')) {
                     </td>
                     <td><input type="number" name="wc_pc_associated_products[min_qty][]"
                             value="<?php echo esc_attr($min_qty); ?>" min="0" style="width:70px;" /></td>
-                    <td><input type="number" name="wc_pc_associated_products[max_qty][]"
-                            value="<?php echo esc_attr($max_qty); ?>" min="0" style="width:70px;" /></td>
+                    <td><input type="number" placeholder=<?php esc_html_e('Unlimited', 'woocommerce-product-composer') ?>
+                            name="wc_pc_associated_products[max_qty][]" value="<?php echo esc_attr($max_qty); ?>" min="0"
+                            style="width:95px;" /></td>
                     <td><button type="button"
                             class="button wc-pc-remove-row"><?php esc_html_e('Remove', 'woocommerce-product-composer'); ?></button>
                     </td>
