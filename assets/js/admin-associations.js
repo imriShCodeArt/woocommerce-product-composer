@@ -37,4 +37,32 @@
       );
     }
   });
+
+  // NEW: Handle Scan Components Button
+  $("#wc_pc_scan_components_button").on("click", function (e) {
+    e.preventDefault();
+
+    var button = $(this);
+    var productId = button.data("product-id");
+
+    button.prop("disabled", true).text("Scanning...");
+
+    $.post(
+      wc_pc_admin.ajax_url,
+      {
+        action: "wc_pc_scan_components",
+        nonce: wc_pc_admin.nonce,
+        product_id: productId,
+      },
+      function (response) {
+        if (response.success) {
+          alert(response.data.message);
+          location.reload();
+        } else {
+          alert(response.data.message);
+          button.prop("disabled", false).text("Scan Components Automatically");
+        }
+      }
+    );
+  });
 })(jQuery);
