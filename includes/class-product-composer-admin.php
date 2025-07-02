@@ -6,8 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-//
-
 class Admin
 {
 
