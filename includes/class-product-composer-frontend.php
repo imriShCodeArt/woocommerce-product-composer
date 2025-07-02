@@ -11,8 +11,21 @@ class Frontend
 
     public function __construct()
     {
-        add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'render_composer_section' ], 10 );
+        add_action('woocommerce_before_add_to_cart_button', [$this, 'render_composer_section'], 10);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
     }
+
+    public function enqueue_scripts()
+    {
+        wp_enqueue_script(
+            'wc-product-composer',
+            URL . 'assets/js/product-composer.js',
+            [],
+            VERSION,
+            true
+        );
+    }
+
 
     public function render_composer_section()
     {

@@ -8,7 +8,9 @@
  * Domain Path: /languages
  */
 
+
 namespace WC_Product_Composer;
+define('VERSION', '1.0.0');
 
 if (!defined('ABSPATH')) {
     exit;
@@ -17,6 +19,7 @@ if (!defined('ABSPATH')) {
 // Define plugin constants
 define(__NAMESPACE__ . '\PATH', plugin_dir_path(__FILE__));
 define(__NAMESPACE__ . '\URL', plugin_dir_url(__FILE__));
+
 
 // Include required files
 require_once PATH . 'includes/class-product-composer-admin.php';
@@ -32,7 +35,7 @@ function init_plugin()
 {
     if (class_exists('\WooCommerce')) {
         // Initialize logger early
-        Logger::get_instance()->info('WooCommerce Product Composer plugin initialized.');
+        // Logger::get_instance()->info('WooCommerce Product Composer plugin initialized.');
 
         // Admin
         if (is_admin()) {
