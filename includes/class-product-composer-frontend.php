@@ -28,7 +28,7 @@ class Frontend
             'product-composer-section.php',
             ['associated_products' => $associated_products],
             '',
-            WC_PC_PATH . 'templates/'
+            PATH . 'templates/'
         );
     }
 }
