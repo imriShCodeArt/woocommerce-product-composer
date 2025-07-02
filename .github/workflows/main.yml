@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./woocommerce-product-composer/
+          local-dir: ./
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}
           exclude: |
             **/.git*
