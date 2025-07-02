@@ -8,7 +8,6 @@ if (!defined('ABSPATH')) {
 
 class Admin
 {
-
     public function __construct()
     {
         add_action('add_meta_boxes', [$this, 'add_association_metabox']);
@@ -33,7 +32,7 @@ class Admin
 
         $associated_ids = get_post_meta($post->ID, '_associated_products', true);
         if (!is_array($associated_ids)) {
-            $associated_ids = [];
+            $associated_ids = $associated_ids ? [(int) $associated_ids] : [];
         }
 
         $args = [
@@ -71,7 +70,7 @@ class Admin
             return;
         }
 
-        if (isset($_POST['wc_pc_associated_products'])) {
+        if (isset($_POST['wc_pc_associated_products']) && is_array($_POST['wc_pc_associated_products'])) {
             $ids = array_map('intval', $_POST['wc_pc_associated_products']);
             update_post_meta($post_id, '_associated_products', $ids);
         } else {
