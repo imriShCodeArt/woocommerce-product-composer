@@ -20,9 +20,12 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./
+          local-dir: ./ 
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}
           exclude: |
-            **/.git*
+            **/.git/
+            **/.git/**
+            **/.gitignore
+            **/.gitattributes
             **/node_modules/**
             **/.DS_Store
