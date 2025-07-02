@@ -22,6 +22,7 @@ define(__NAMESPACE__ . '\URL', plugin_dir_url(__FILE__));
 require_once PATH . 'includes/class-product-composer-admin.php';
 require_once PATH . 'includes/class-product-composer-frontend.php';
 require_once PATH . 'includes/class-product-composer-cart.php';
+require_once PATH . 'includes/class-product-composer-logger.php';
 require_once PATH . 'includes/helpers.php';
 
 // Init plugin
@@ -30,6 +31,9 @@ add_action('plugins_loaded', __NAMESPACE__ . '\init_plugin');
 function init_plugin()
 {
     if (class_exists('\WooCommerce')) {
+        // Initialize logger early
+        Logger::get_instance()->info('WooCommerce Product Composer plugin initialized.');
+
         // Admin
         if (is_admin()) {
             new \WC_Product_Composer\Admin();
