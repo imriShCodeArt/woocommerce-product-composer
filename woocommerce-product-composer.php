@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Product Composer
  * Description: Allows customers to compose product packages by selecting related accessories directly on product pages.
  * Version: 1.0.0
- * Author: Your Name
+ * Author: M.L Web Solutions
  * Text Domain: woocommerce-product-composer
  * Domain Path: /languages
  */
