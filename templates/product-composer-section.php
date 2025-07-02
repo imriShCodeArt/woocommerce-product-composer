@@ -48,7 +48,7 @@ if (empty($associated_products)) {
                         <?php esc_html_e('Quantity', 'woocommerce-product-composer'); ?>
                     </label>
 
-                    <input step="1" type="number" id="wc_pc_accessory_qty_<?php echo esc_attr($product_id); ?>"
+                    <input step="0" type="number" id="wc_pc_accessory_qty_<?php echo esc_attr($product_id); ?>"
                         name="wc_pc_accessories[<?php echo esc_attr($product_id); ?>][quantity]"
                         value="<?php echo esc_attr(max(1, $min_qty)); ?>"
                         min="<?php echo esc_attr($min_qty); ?>"
