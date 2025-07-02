@@ -18,9 +18,21 @@ class Frontend
     {
         global $product;
 
+        $logger = Logger::get_instance();
+
+        if (!$product) {
+            $logger->error('No global $product object found in Frontend::render_composer_section.');
+            return;
+        }
+
+        $logger->info('Rendering composer section for product ID: ' . $product->get_id());
+
         $associated_products = get_associated_products($product->get_id());
 
+        $logger->info('Found ' . count($associated_products) . ' associated products for product ID: ' . $product->get_id());
+
         if (empty($associated_products)) {
+            $logger->info('No associated products. Composer section will not render.');
             return;
         }
 
@@ -30,5 +42,7 @@ class Frontend
             '',
             PATH . 'templates/'
         );
+
+        $logger->info('Composer section rendered successfully for product ID: ' . $product->get_id());
     }
 }

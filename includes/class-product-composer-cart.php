@@ -20,13 +20,21 @@ class Cart
      */
     public function add_accessory_cart_data($cart_item_data, $product_id, $variation_id)
     {
+        $logger = Logger::get_instance();
+
+        $logger->info('add_accessory_cart_data triggered for product ID: ' . $product_id);
+
         if (isset($_POST['wc_pc_accessories']) && is_array($_POST['wc_pc_accessories'])) {
             $accessory_ids = array_map('intval', $_POST['wc_pc_accessories']);
+            $logger->info('Accessories submitted: ' . implode(', ', $accessory_ids));
             $cart_item_data['wc_pc_accessories'] = $accessory_ids;
+        } else {
+            $logger->info('No accessories submitted in POST.');
         }
 
         return $cart_item_data;
     }
+
 
     /**
      * Add selected accessories to the cart as separate line items.
