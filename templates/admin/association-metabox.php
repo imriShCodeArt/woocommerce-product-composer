@@ -48,9 +48,11 @@ if (!defined('ABSPATH')) {
                 ?>
                 <tr>
                     <td>
-                        <input type="hidden" name="wc_pc_associated_products[product_id][]"
-                            value="<?php echo esc_attr($product_id); ?>" />
-                        <?php echo esc_html($product->post_title); ?>
+                        <a href="<?php echo esc_url(get_edit_post_link($product->ID)); ?>" target="_blank">
+                            <input type="hidden" name="wc_pc_associated_products[product_id][]"
+                                value="<?php echo esc_attr($product_id); ?>" />
+                            <?php echo esc_html($product->post_title); ?>
+                        </a>
                     </td>
                     <td><input type="number" name="wc_pc_associated_products[min_qty][]"
                             value="<?php echo esc_attr($min_qty); ?>" min="0" style="width:70px;" /></td>

@@ -13,6 +13,76 @@ class Admin
         add_action('add_meta_boxes', [$this, 'add_association_metabox']);
         add_action('save_post', [$this, 'save_association_meta']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+        add_action('add_meta_boxes', [$this, 'add_used_in_metabox']);
+    }
+
+    public function add_used_in_metabox()
+    {
+        add_meta_box(
+            'wc_pc_used_in',
+            __('Used In Other Products', 'woocommerce-product-composer'),
+            [$this, 'render_used_in_metabox'],
+            'product',
+            'side',
+            'default'
+        );
+    }
+
+    public function render_used_in_metabox($post)
+    {
+        $current_id = $post->ID;
+
+        // Find all products that associate this product
+        $args = [
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'meta_query' => [
+                [
+                    'key' => '_associated_products',
+                    'compare' => 'EXISTS'
+                ]
+            ],
+            'fields' => 'ids'
+        ];
+
+        $products = get_posts($args);
+        $used_in = [];
+
+        foreach ($products as $product_id) {
+            $associations = get_post_meta($product_id, '_associated_products', true);
+
+            if (!is_array($associations)) {
+                $associations = $associations ? [
+                    [
+                        'product_id' => (int) $associations,
+                        'min_qty' => 0,
+                        'max_qty' => 0
+                    ]
+                ] : [];
+            }
+
+            foreach ($associations as $assoc) {
+                $assoc_id = is_array($assoc) ? intval($assoc['product_id']) : intval($assoc);
+                if ($assoc_id === $current_id) {
+                    $used_in[] = $product_id;
+                    break;
+                }
+            }
+        }
+
+        if (empty($used_in)) {
+            echo '<p>' . esc_html__('This product is not used as an accessory in any other product.', 'woocommerce-product-composer') . '</p>';
+        } else {
+            echo '<ul>';
+            foreach ($used_in as $pid) {
+                $prod = get_post($pid);
+                if ($prod) {
+                    echo '<li><a href="' . esc_url(get_edit_post_link($pid)) . '">' . esc_html($prod->post_title) . '</a></li>';
+                }
+            }
+            echo '</ul>';
+        }
     }
 
     public function add_association_metabox()
@@ -99,7 +169,7 @@ class Admin
                     'no_items_label' => __('No associated products yet.', 'woocommerce-product-composer'),
                     'unlimited_label' => __('Unlimited', 'woocommerce-product-composer'),
                 ]);
-                
+
             }
         }
     }
